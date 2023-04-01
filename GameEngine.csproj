@@ -5,48 +5,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net7.0-windows</TargetFramework>
-        <UseWindowsForms>true</UseWindowsForms>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="Sayers.SDL2.Core" Version="1.0.11" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="src\assets" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="src\assets\icon.png" />
-      <Content Include="src\assets\icon.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="src\assets\tiles.png" />
-      <Content Include="src\assets\tiles.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="src\assets\border.png" />
-      <Content Include="src\assets\border.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="src\assets\nums_background.png" />
-      <Content Include="src\assets\nums_background.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="src\assets\numbers.png" />
-      <Content Include="src\assets\numbers.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="src\assets\smileys.png" />
-      <Content Include="src\assets\smileys.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="src\assets\icon.ico" />
-      <Content Include="src\assets\icon.ico">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
     </ItemGroup>
 </Project>
