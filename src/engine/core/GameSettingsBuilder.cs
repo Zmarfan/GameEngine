@@ -8,6 +8,7 @@ using GameEngine.engine.core.update.physics.layers;
 using GameEngine.engine.core.update.physics.settings;
 using GameEngine.engine.helper;
 using GameEngine.engine.scene;
+using GameEngine.engine.window;
 using GameEngine.engine.window.menu;
 
 namespace GameEngine.engine.core; 
@@ -15,10 +16,8 @@ namespace GameEngine.engine.core;
 public class GameSettingsBuilder {
     private bool _debug = true;
     private string _title = "My Game";
-    private int _width = 600;
-    private int _height = 400;
-    private string? _iconSrc = null;
     private Assets _assets = new(ListUtils.Empty<AssetDeclaration>(), ListUtils.Empty<AssetDeclaration>(), ListUtils.Empty<AssetDeclaration>());
+    private WindowSettings _windowSettings = WindowSettingsBuilder.Builder().Build();
     private readonly List<Scene> _scenes = new();
     private readonly List<InputListener> _inputListeners = new();
     private PhysicsSettings _physicsSettings = PhysicsSettingsBuilder
@@ -31,14 +30,13 @@ public class GameSettingsBuilder {
     private AudioSettings _audioSettings = new(Volume.Max(), ListUtils.Empty<AudioChannel>());
     private CursorSettings _cursorSettings = new(true, true);
     private GizmoSettings _gizmoSettings = GizmoSettingsBuilder.Builder().Build();
-    private WindowMenu? _windowMenu = null;
-    
+
     public static GameSettingsBuilder Builder() {
         return new GameSettingsBuilder();
     }
 
     public GameSettings Build() {
-        return new GameSettings(_debug, _title, _width, _height, _iconSrc, _assets, _scenes, _inputListeners, _physicsSettings, _sortLayers, _audioSettings, _cursorSettings, _gizmoSettings, _windowMenu);
+        return new GameSettings(_debug, _title, _assets, _windowSettings, _scenes, _inputListeners, _physicsSettings, _sortLayers, _audioSettings, _cursorSettings, _gizmoSettings);
     }
 
     public GameSettingsBuilder SetAssets(Assets assets) {
@@ -61,21 +59,11 @@ public class GameSettingsBuilder {
         return this;
     } 
     
-    public GameSettingsBuilder SetWindowWidth(int width) {
-        _width = width;
-        return this;
-    } 
-    
-    public GameSettingsBuilder SetWindowHeight(int height) {
-        _height = height;
+    public GameSettingsBuilder SetWindowSettings(WindowSettings windowSettings) {
+        _windowSettings = windowSettings;
         return this;
     }
 
-    public GameSettingsBuilder SetWindowIcon(string iconSrc) {
-        _iconSrc = iconSrc;
-        return this;
-    }
-    
     public GameSettingsBuilder AddScenes(IEnumerable<Scene> scenes) {
         _scenes.AddRange(scenes);
         return this;
@@ -108,11 +96,6 @@ public class GameSettingsBuilder {
 
     public GameSettingsBuilder SetGizmoSettings(GizmoSettings settings) {
         _gizmoSettings = settings;
-        return this;
-    }
-
-    public GameSettingsBuilder SetWindowMenu(WindowMenu menu) {
-        _windowMenu = menu;
         return this;
     }
 }

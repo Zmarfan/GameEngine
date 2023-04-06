@@ -5,6 +5,7 @@ using GameEngine.engine.core.gizmos;
 using GameEngine.engine.core.input.listener;
 using GameEngine.engine.core.update.physics.settings;
 using GameEngine.engine.scene;
+using GameEngine.engine.window;
 using GameEngine.engine.window.menu;
 
 namespace GameEngine.engine.core; 
@@ -12,25 +13,20 @@ namespace GameEngine.engine.core;
 public record GameSettings(
     bool debug,
     string title,
-    int width, 
-    int height,
-    string? iconSrc,
     Assets assets,
+    WindowSettings windowSettings,
     List<Scene> scenes, 
     List<InputListener> inputListeners,
     PhysicsSettings physicsSettings,
     List<string> sortLayers,
     AudioSettings audioSettings,
     CursorSettings cursorSettings,
-    GizmoSettings gizmoSettings,
-    WindowMenu? windowMenu
+    GizmoSettings gizmoSettings
 ) {
     public readonly bool debug = debug;
     public readonly string title = title;
-    public int width = width;
-    public int height = height;
-    public string? iconSrc = iconSrc;
     public readonly Assets assets = assets;
+    public readonly WindowSettings windowSettings = windowSettings;
     public readonly List<Scene> scenes = scenes;
     public readonly List<InputListener> inputListeners = inputListeners;
     public readonly PhysicsSettings physicsSettings = physicsSettings;
@@ -38,5 +34,4 @@ public record GameSettings(
     public readonly AudioSettings audioSettings = audioSettings;
     public readonly CursorSettings cursorSettings = cursorSettings;
     public readonly GizmoSettings gizmoSettings = gizmoSettings;
-    public readonly WindowMenu? windowMenu = windowMenu;
 }

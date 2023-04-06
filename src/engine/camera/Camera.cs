@@ -1,5 +1,6 @@
 ﻿using GameEngine.engine.core;
 using GameEngine.engine.data;
+using GameEngine.engine.window;
 using Color = GameEngine.engine.data.Color;
 
 namespace GameEngine.engine.camera; 
@@ -25,7 +26,7 @@ public class Camera {
 
     public TransformationMatrix WorldToScreenMatrix {
         get {
-            if (_oldScreenHeight != _settings.height || _oldScreenWidth != _settings.width) {
+            if (_oldResolution != _settings.resolution) {
                 SetDirty();
             }
             if (!_isWorldDirty) {
@@ -34,7 +35,7 @@ public class Camera {
 
             _isWorldDirty = false;
             _worldToScreenMatrix = TransformationMatrix.CreateWorldToScreenMatrix(
-                new Vector2(_oldScreenWidth / 2f - _position.x, _oldScreenHeight / 2f + _position.y),
+                new Vector2(_oldResolution.x / 2f - _position.x, _oldResolution.y / 2f + _position.y),
                 new Vector2(1 / _size, 1 / _size)
             );
             return _worldToScreenMatrix;
@@ -43,7 +44,7 @@ public class Camera {
 
     public TransformationMatrix ScreenToWorldMatrix {
         get {
-            if (_oldScreenHeight != _settings.height || _oldScreenWidth != _settings.width) {
+            if (_oldResolution != _settings.resolution) {
                 SetDirty();
             }
             if (!_isWorldInverseDirty) {
@@ -58,7 +59,7 @@ public class Camera {
     
     public TransformationMatrix UiToScreenMatrix {
         get {
-            if (_oldScreenHeight != _settings.height || _oldScreenWidth != _settings.width) {
+            if (_oldResolution != _settings.resolution) {
                 SetDirty();
             }
             if (!_isUiDirty) {
@@ -67,7 +68,7 @@ public class Camera {
 
             _isUiDirty = false;
             _uiToWorldMatrix = TransformationMatrix.CreateWorldToScreenMatrix(
-                new Vector2(_oldScreenWidth / 2f, _oldScreenHeight / 2f),
+                new Vector2(_oldResolution.x / 2f, _oldResolution.y / 2f),
                 Vector2.One()
             );
             return _uiToWorldMatrix;
@@ -76,7 +77,7 @@ public class Camera {
     
     public TransformationMatrix ScreenToUiMatrix {
         get {
-            if (_oldScreenHeight != _settings.height || _oldScreenWidth != _settings.width) {
+            if (_oldResolution != _settings.resolution) {
                 SetDirty();
             }
             if (!_isUiInverseDirty) {
@@ -99,16 +100,15 @@ public class Camera {
     private bool _isWorldInverseDirty = true;
     private bool _isUiDirty = true;
     private bool _isUiInverseDirty = true;
-    private readonly GameSettings _settings;
-    private int _oldScreenWidth;
-    private int _oldScreenHeight;
+    private readonly WindowSettings _settings;
+    private Vector2Int _oldResolution;
 
-    private Camera(GameSettings settings) {
+    private Camera(WindowSettings settings) {
         _settings = settings;
         SetDirty();
     }
 
-    internal static void CreateMainCamera(GameSettings settings) {
+    internal static void CreateMainCamera(WindowSettings settings) {
         Main = new Camera(settings);
     }
 
@@ -117,7 +117,6 @@ public class Camera {
         _isWorldInverseDirty = true;
         _isUiDirty = true;
         _isUiInverseDirty = true;
-        _oldScreenWidth = _settings.width;
-        _oldScreenHeight = _settings.height;
+        _oldResolution = _settings.resolution;
     }
 }

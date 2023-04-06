@@ -3,5 +3,5 @@
 namespace GameEngine.engine.scene; 
 
 internal class SceneData {
-    public GameObjectHandler? gameObjectHandler = null;
+    public GameObjectHandler gameObjectHandler = null!;
 }

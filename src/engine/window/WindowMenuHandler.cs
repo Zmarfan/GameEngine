@@ -12,11 +12,7 @@ public static class WindowMenuHandler {
     private static readonly Dictionary<uint, string> UNIQUE_ID_TO_IDENTIFIER = new();
     private static readonly Dictionary<string, uint> IDENTIFIER_TO_UNIQUE_ID = new();
         
-    internal static void Init(nint window, WindowMenu? menu) {
-        if (menu == null) {
-            return;
-        }
-        
+    internal static void Init(nint window, WindowMenu menu) {
         nint windowHandle = GetWindowHandle(window);
         SDL.SDL_SetWindowsMessageHook(WindowMessageHook, nint.Zero);
 

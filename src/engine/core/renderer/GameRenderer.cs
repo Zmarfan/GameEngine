@@ -23,7 +23,6 @@ internal class GameRenderer {
     private readonly SceneData _sceneData;
     private readonly GameSettings _settings;
     private static Color DefaultDrawColor => Camera.Main.defaultDrawColor;
-    private bool _isFullscreen;
     private nint? _iconSurface;
     
     public GameRenderer(GameSettings settings, SceneData sceneData) {
@@ -32,8 +31,8 @@ internal class GameRenderer {
             settings.title,
             SDL.SDL_WINDOWPOS_CENTERED, 
             SDL.SDL_WINDOWPOS_CENTERED,
-            settings.width, 
-            settings.height,
+            settings.windowSettings.resolution.x, 
+            settings.windowSettings.resolution.y,
             SDL.SDL_WindowFlags.SDL_WINDOW_SHOWN
         );
         SDL.SDL_SetHint( SDL.SDL_HINT_RENDER_SCALE_QUALITY, "1");
@@ -47,15 +46,17 @@ internal class GameRenderer {
         }
         SDL.SDL_SetWindowGrab(_window, SDL.SDL_bool.SDL_TRUE);
         
-        WindowManager.Init(_window, settings);
+        WindowManager.Init(_window, settings.windowSettings);
 
-        if (settings.iconSrc != null) {
-            InitWindowIcon(settings.iconSrc);
+        if (settings.windowSettings.iconSrc != null) {
+            InitWindowIcon(settings.windowSettings.iconSrc);
         }
         
         _settings = settings;
         _sceneData = sceneData;
-        WindowMenuHandler.Init(_window, _settings.windowMenu);
+        if (_settings.windowSettings.windowMenu != null) {
+            WindowMenuHandler.Init(_window, _settings.windowSettings.windowMenu);
+        }
         _textureStorage = TextureStorage.Init(_renderer, _settings.assets.textureDeclarations);
         _fontHandler = new FontHandler(_renderer, settings.assets.fontDeclarations);
         _rendererHandler = new RendererHandler(_renderer, _fontHandler, settings);
@@ -76,19 +77,6 @@ internal class GameRenderer {
         SDL.SDL_RenderPresent(_renderer);
     }
 
-    public void ToggleFullScreen() {
-        if (_settings.windowMenu != null) {
-            // You can not have a window menu and allow fullscreen, it wonky
-            return;
-        }
-        uint flag = _isFullscreen ? 0 : (uint)SDL.SDL_WindowFlags.SDL_WINDOW_FULLSCREEN;
-        if (SDL.SDL_SetWindowFullscreen(_window, flag) != 0) {
-            throw new Exception($"Unable to change window fullScreen mode due to: {SDL.SDL_GetError()}");
-        }
-        SDL.SDL_SetWindowSize(_window, _settings.width, _settings.height);
-        _isFullscreen = !_isFullscreen;
-    }
-    
     private void InitWindowIcon(string iconSrc) {
         _iconSurface = SDL_image.IMG_Load(iconSrc);
         SDL.SDL_SetWindowIcon(_window, _iconSurface.Value);

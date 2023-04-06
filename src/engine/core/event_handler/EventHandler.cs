@@ -1,7 +1,9 @@
 ﻿using SDL2;
 using GameEngine.engine.core.input.listener;
+using GameEngine.engine.core.window;
 using GameEngine.engine.data;
 using GameEngine.engine.logger;
+using GameEngine.engine.window;
 using Button = GameEngine.engine.core.input.listener.Button;
 
 namespace GameEngine.engine.core.event_handler; 
@@ -11,11 +13,10 @@ internal class EventHandler {
     public event ButtonEventDelegate? KeyDownEvent;
     public event ButtonEventDelegate? KeyUpEvent;
     public event MouseMovementEventDelegate? MouseMovementEvent;
-    public event EventVoidDelegate? ToggleFullscreenEvent;
 
-    private readonly GameSettings _settings;
+    private readonly WindowSettings _settings;
     
-    public EventHandler(GameSettings settings) {
+    public EventHandler(WindowSettings settings) {
         _settings = settings;
     }
     
@@ -37,15 +38,14 @@ internal class EventHandler {
                     QuitEvent?.Invoke();
                     break;
                 case SDL.SDL_EventType.SDL_WINDOWEVENT: {
-                    if (e.window.windowEvent == SDL.SDL_WindowEventID.SDL_WINDOWEVENT_RESIZED) {
-                        _settings.width = e.window.data1;
-                        _settings.height = e.window.data2;
+                    if (e.window.windowEvent == SDL.SDL_WindowEventID.SDL_WINDOWEVENT_SIZE_CHANGED) {
+                        _settings.resolution = new Vector2Int(e.window.data1, e.window.data2);
                     }
                     break;
                 }
                 case SDL.SDL_EventType.SDL_KEYDOWN: {
                     if (IsEnterFullScreen(e.key.keysym)) {
-                        ToggleFullscreenEvent?.Invoke();
+                        WindowManager.ToggleFullScreen();
                     }
 
                     if (SdlInputCodeToButton.SCANCODE_TO_BUTTON.TryGetValue(e.key.keysym.scancode, out Button value)) {
@@ -72,8 +72,8 @@ internal class EventHandler {
                     break;
                 }
                 case SDL.SDL_EventType.SDL_MOUSEMOTION: {
-                    float relativeXPosition = e.motion.x / (float)_settings.width;
-                    float relativeYPosition = (_settings.height - e.motion.y) / (float)_settings.height;
+                    float relativeXPosition = e.motion.x / (float)_settings.resolution.x;
+                    float relativeYPosition = (_settings.resolution.y - e.motion.y) / (float)_settings.resolution.y;
                     MouseMovementEvent?.Invoke(new Vector2(relativeXPosition, relativeYPosition), new Vector2(e.motion.xrel, -e.motion.yrel));
                     break;
                 }

@@ -9,6 +9,7 @@ using GameEngine.engine.core.input;
 using GameEngine.engine.core.renderer;
 using GameEngine.engine.core.update;
 using GameEngine.engine.core.update.physics.layers;
+using GameEngine.engine.core.window;
 using GameEngine.engine.logger;
 using GameEngine.engine.scene;
 using EventHandler = GameEngine.engine.core.event_handler.EventHandler;
@@ -37,12 +38,11 @@ public class Game {
             throw new Exception();
         }
         
-        _eventHandler = new EventHandler(settings);
-        Input inputHandler = Input.Init(settings, _eventHandler, settings.inputListeners);
+        _eventHandler = new EventHandler(settings.windowSettings);
+        Input inputHandler = Input.Init(settings.windowSettings, _eventHandler, settings.inputListeners);
         _updateHandler = new UpdateHandler(inputHandler, _sceneData);
         _gameRenderer = new GameRenderer(settings, _sceneData);
         _eventHandler.QuitEvent += () => _isRunning = false;
-        _eventHandler.ToggleFullscreenEvent += _gameRenderer.ToggleFullScreen;
         _audioHandler = AudioHandler.Init(settings.audioSettings, settings.assets.audioDeclarations);
         LayerMask.Init(settings.physicsSettings.layersToCollisionLayers);
         Gizmos.Init(settings.gizmoSettings);
@@ -80,7 +80,7 @@ public class Game {
 
     private void LoadScene(Scene scene) {
         _sceneData.gameObjectHandler?.DestroyScene();
-        Camera.CreateMainCamera(_settings);
+        Camera.CreateMainCamera(_settings.windowSettings);
         scene.CameraInitializer.Invoke(Camera.Main);
         _sceneData.gameObjectHandler = new GameObjectHandler(scene.CreateWorldGameObjectRoot(), scene.CreateSceneGameObjectRoot());
     }
