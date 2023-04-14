@@ -11,7 +11,7 @@ public struct TransformationMatrix {
     private float _m12 = 0;
     private float _m22 = 1;
 
-    private TransformationMatrix(float m00, float m10, float m20, float m01, float m11, float m21, float m02, float m12, float m22) {
+    public TransformationMatrix(float m00, float m10, float m20, float m01, float m11, float m21, float m02, float m12, float m22) {
         _m00 = m00;
         _m10 = m10;
         _m20 = m20;
@@ -25,6 +25,10 @@ public struct TransformationMatrix {
     
     public static TransformationMatrix Identity() {
         return new TransformationMatrix(1, 0, 0, 0, 1, 0, 0, 0, 1);
+    }
+    
+    private static TransformationMatrix Zero() {
+        return new TransformationMatrix(0, 0, 0, 0, 0, 0, 0, 0, 0);
     }
 
     public static TransformationMatrix CreateWorldToScreenMatrix(Vector2 position, Vector2 scale) {
@@ -61,13 +65,15 @@ public struct TransformationMatrix {
     }
 
     public TransformationMatrix Inverse() {
-        float determinant = 1 / (
-            this[0, 0] * (this[1, 1] * this[2, 2] - this[2, 1] * this[1, 2])
-            - this[1, 0] * (this[0, 1] * this[2, 2] - this[2, 1] * this[0, 2])
-            - this[2, 0] * (this[0, 1] * this[1, 2] - this[1, 1] * this[0, 2])
-        );
+        float determinant = this[0, 0] * (this[1, 1] * this[2, 2] - this[2, 1] * this[1, 2])
+                            - this[1, 0] * (this[0, 1] * this[2, 2] - this[2, 1] * this[0, 2])
+                            - this[2, 0] * (this[0, 1] * this[1, 2] - this[1, 1] * this[0, 2]);
+        
+        if (determinant == 0) {
+            return Zero();
+        }
 
-        return determinant * new TransformationMatrix(
+        return 1 / determinant * new TransformationMatrix(
             this[1, 1] * this[2, 2] - this[2, 1] * this[1, 2],
             this[2, 0] * this[1, 2] - this[1, 0] * this[2, 2],
             this[1, 0] * this[2, 1] - this[2, 0] * this[1, 1],
