@@ -21,9 +21,9 @@ The goal is to only write code with no interfaces or UI but to have the game eng
 ## Games using the engine
 Two example games has been developed utilizing the game engine:
 
-### [Minesweeper Clone](https://github.com/Zmarfan/Asteroids)
+### [Minesweeper Clone](https://github.com/Zmarfan/Minesweeper)
 ![minesweeper-img](https://github.com/Zmarfan/GameEngine/blob/main/src/images/minesweeper.png?raw=true)
 
-### [Asteroids Clone](https://github.com/Zmarfan/Minesweeper)
+### [Asteroids Clone](https://github.com/Zmarfan/Asteroids)
 ![asteroids-img-0](https://github.com/Zmarfan/GameEngine/blob/main/src/images/asteroids_0.png?raw=true)
 ![asteroids-img-1](https://github.com/Zmarfan/GameEngine/blob/main/src/images/asteroids_1.png?raw=true)
